@@ -15,6 +15,12 @@ RUN --mount=type=cache,target=/root/.cache \
 # Elevated properites for run.sh script
 RUN chmod a+x run.sh
 
+
+# Windows puts \r charaters on every new line, breaks the script! Fix:
+RUN apt update
+RUN apt install dos2unix
+RUN dos2unix run.sh
+
 # Download models
 RUN bash run.sh
 
