@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+    <title>Семантический Анализ текста? Лебедев Степан</title>
+</head>
+<body>
+    <h1> Семантический анализ текста с помощью BERTweet</h1>
+    <h3> Лебедев Степан, 04.2024</h3>
+    <div>
+        <p id="status-text">Статус модели:</p>
+        <button id="ping">Ping!</button>
+    </div>
+    <div>
+        <form id="predict_text">
+            <p>
+                <label for="text">Input текст:</label>
+                <input type="text" id="input"/>
+            </p>
+            <button id="send_data">Submit</button>
+        </form>
+    <p id="model-result"></p>
+    </div>
+
+    <script>
+        // Getting buttons
+        const ping_button = document.getElementById('ping');
+        const submit_button = document.getElementById('send_data');
+
+        // Function fetches a GET ping request to torchserve backend container and outputs result on page
+        let onPingClick = async function() {
+            const response = await fetch('http://127.0.0.1:8080/ping', {
+                method: 'GET'
+            })
+            const result = await response.json();
+
+            document.getElementById('status-text').innerText = "Статус модели: "+result["status"]
+        }
+
+        // Function fetches a POST inference request to torchserve backend container and outputs result on page
+        let onSubmitClick = async function(e) {
+            e.preventDefault();
+            submit_text = document.getElementById('input').value
+
+            const response = await fetch('http://127.0.0.1:8080/predictions/my_model', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({input: submit_text})
+            })
+            const result = await response.json();
+
+            document.getElementById('model-result').innerText = "Ответ модели: "+result[0]
+        }
+
+        //  Event listeners initialization
+        ping_button.addEventListener('click', onPingClick);
+        submit_button.addEventListener('click', onSubmitClick);
+    </script>
+</body>
