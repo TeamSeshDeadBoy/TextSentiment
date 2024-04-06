@@ -39,6 +39,8 @@ A Service to analyzie a text and determine its sentiment metric.
 Весь сервис разбит на два микросервиса, обернутые в `docker container` и скомпанованны через `docker-compose`.  
 Чтобы поднять оба контейнера и сервис:
 
+0. pull repository
+
 1. cd в директорию проекта
 2. `docker compose build` - для сборки
 3. `docker compose up` - для поднятия
